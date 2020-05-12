@@ -19,4 +19,12 @@ endforeach()
 
 
 
+# Create Symlink for compile commands for YCM
+if(CMAKE_EXPORT_COMPILE_COMMANDS)
+		message(STATUS "compile commands ON")
+	set(comp_file "compile_commands.json")
+	execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${PROJECT_BINARY_DIR}/${comp_file} ${CMAKE_SOURCE_DIR}/src/${comp_file})
 
+	else()
+			message(STATUS "compile commands OFF")
+	endif()
