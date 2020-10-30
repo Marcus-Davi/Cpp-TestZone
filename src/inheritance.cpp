@@ -29,7 +29,7 @@ class Parent {
 };
 
 
-class Child : protected Parent {
+class Child : public Parent {
     public:
     Child(){
         std::cout << "Child Created" << std::endl;
@@ -67,8 +67,22 @@ class Child : protected Parent {
 
 
 int main(){
-    Child a;
-    a.ChildMethod();
+    Parent p;
+    Child c;
+    
+    // Child* c_pt;
+    Parent* p_pt = new Child;
+
+    p_pt->GetID();
+
+    delete p_pt;
+
+    p_pt = new Parent;
+
+    p_pt->GetID();
+
+    
+    
     
     
     
