@@ -3,6 +3,37 @@
 #include <memory>
 using namespace std;
 
+class ObjA
+{
+public:
+    ObjA() {}
+    ObjA(int a) : prot_a(a){};
+
+    virtual ~ObjA() {}
+
+    int getProt() { return prot_a; }
+
+protected:
+    int prot_a;
+
+    void ProtMethod() { cout << "Protected Method"; }
+};
+
+class ObjA_Child : ObjA
+{
+public:
+
+    // using ObjA::prot_a; // no more inaccessible
+    using ObjA::getProt; // no more inacessible
+
+    ObjA_Child(){};
+    ObjA_Child(int a, int b) : ObjA(a + b) {}
+
+    void setProt(int a)
+    {
+        prot_a = a;
+    }
+};
 
 template <class T>
 class Abstract
@@ -12,7 +43,8 @@ public:
     virtual ~Abstract() {}
 
     // Child will call implemented
-    virtual void Method1(){
+    virtual void Method1()
+    {
         cout << "Abstract Method1" << endl;
     }
 
@@ -21,31 +53,29 @@ public:
         cout << "Abstract Method2" << endl;
     }
 
-    void SetPrivate(T a){
+    void SetPrivate(T a)
+    {
         priv_a = a;
     }
 
-    T getPrivate(){
+    T getPrivate()
+    {
         return priv_a;
     }
 
 private:
     T priv_a;
 
-
 protected:
     T prot_a;
 };
-
 
 template <class T>
 class Child : public Abstract<T>
 {
 public:
-    
     // using Abstract<T>::priv_a; // private
     using Abstract<T>::prot_a; // Compile error if not used
-
 
     void Method1()
     {
@@ -58,20 +88,18 @@ public:
     }
 
     // Protected assessible
-    T GetProtected(){
+    T GetProtected()
+    {
         return prot_a;
     }
 
-    void setProtected(T a){
+    void setProtected(T a)
+    {
         prot_a = a;
     }
 
 private:
-
 protected:
-
-
-
 };
 
 struct Point
@@ -134,24 +162,29 @@ void TestPolymorphism(Abstract<T> *obj)
 
 int main()
 {
+    ObjA A;
+    ObjA B(2);
+    ObjA_Child A_c(5,6);
+    cout << A_c.getProt() << endl;
+    
+
+    exit(0);
 
     // Abstract abs;
-    Abstract<float>* abs_ptr = new Abstract<float>;
-    Child<float>* chld_ptr = new Child<float>;
+    Abstract<float> *abs_ptr = new Abstract<float>;
+    Child<float> *chld_ptr = new Child<float>;
     chld_ptr->setProtected(3.4);
     cout << chld_ptr->getPrivate() << std::endl;
 
     std::cout << chld_ptr->GetProtected() << std::endl;
-    
+
     // Typecast to Abstract
     TestPolymorphism(chld_ptr);
 
-    chld_ptr = (Child<float>*)abs_ptr;
+    chld_ptr = (Child<float> *)abs_ptr;
     // abs_ptr = (Abstract<float>*)chld_ptr;
 
     TestPolymorphism(abs_ptr);
-    
-
 
     // abs_ptr = &abs;
 
