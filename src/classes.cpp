@@ -22,7 +22,6 @@ protected:
 class ObjA_Child : ObjA
 {
 public:
-
     // using ObjA::prot_a; // no more inaccessible
     using ObjA::getProt; // no more inacessible
 
@@ -63,10 +62,16 @@ public:
         return priv_a;
     }
 
+    void compute()
+    {
+        initCompute(); // call
+    }
+
 private:
     T priv_a;
 
 protected:
+    virtual bool initCompute() = 0;
     T prot_a;
 };
 
@@ -100,6 +105,12 @@ public:
 
 private:
 protected:
+    bool initCompute() override
+    {
+        cout << "Child Init Compute (Protected)" << endl;
+
+        return true;
+    }
 };
 
 struct Point
@@ -160,35 +171,51 @@ void TestPolymorphism(Abstract<T> *obj)
     obj->Method2();
 }
 
+// Impl
+template <class T>
+bool Abstract<T>::initCompute()
+{
+    cout << "Abstract Init Compute (Protected)" << endl;
+
+    return true;
+}
+
 int main()
 {
+    // Test Stuff Here. Call return 0 after test to assure modular testing.
+
+    // Abstract<float> aaa;
+    Child<float> bbb;
+    bbb.compute();
+
+    return 0;
+
     ObjA A;
     ObjA B(2);
-    ObjA_Child A_c(5,6);
+    ObjA_Child A_c(5, 6);
     cout << A_c.getProt() << endl;
-    
 
-    exit(0);
+    return 0;
 
     // Abstract abs;
-    Abstract<float> *abs_ptr = new Abstract<float>;
-    Child<float> *chld_ptr = new Child<float>;
-    chld_ptr->setProtected(3.4);
-    cout << chld_ptr->getPrivate() << std::endl;
+    // Abstract<float> *abs_ptr = new Abstract<float>;
+    // Child<float> *chld_ptr = new Child<float>;
+    // chld_ptr->setProtected(3.4);
+    // cout << chld_ptr->getPrivate() << std::endl;
 
-    std::cout << chld_ptr->GetProtected() << std::endl;
+    // std::cout << chld_ptr->GetProtected() << std::endl;
 
-    // Typecast to Abstract
-    TestPolymorphism(chld_ptr);
+    // // Typecast to Abstract
+    // TestPolymorphism(chld_ptr);
 
-    chld_ptr = (Child<float> *)abs_ptr;
-    // abs_ptr = (Abstract<float>*)chld_ptr;
+    // chld_ptr = (Child<float> *)abs_ptr;
+    // // abs_ptr = (Abstract<float>*)chld_ptr;
 
-    TestPolymorphism(abs_ptr);
+    // TestPolymorphism(abs_ptr);
 
-    // abs_ptr = &abs;
+    // // abs_ptr = &abs;
 
-    exit(0);
+    return 0;
 
     std::shared_ptr<PointCloud> A_ptr(new PointCloud);
     std::shared_ptr<PointCloud> B_ptr(A_ptr); // Same object, dous not call constructor
