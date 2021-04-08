@@ -54,8 +54,36 @@ void VecAccess(const vector<T> &obj)
 
 int A::count = 0;
 
+int* x_str; 
+
+int& soma(int a,int b){
+    int* x = new int;
+    x_str = x;
+    *x = a+b;
+    // cout << "x addr&: " << &x << endl;
+    cout << "x addr: " << x << endl;
+    return *x;
+}
+
 int main()
 {
+    int um = 1;
+
+    int& _um = um;
+
+    cout << _um << endl;
+
+    um = 2;
+
+    cout << _um << endl; // ref
+    int& a = soma(5,6);
+    *x_str = 2;
+    cout << "a = " << a << endl;
+    cout << "x_str = " << x_str << endl;
+
+
+    return 0;
+
     vector<A> A_vec;
     A_vec.reserve(5);
     for (int i = 0; i < 5; ++i)

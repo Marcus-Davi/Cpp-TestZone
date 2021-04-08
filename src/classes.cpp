@@ -180,10 +180,31 @@ bool Abstract<T>::initCompute()
     return true;
 }
 
+class teste {
+    public:
+    int& X()  { return x; } // curioso!
+
+    teste(int a) : x(a) {}
+    void printX() {
+        std::cout << x << std::endl;
+    }
+    
+    private: 
+    int x;
+};
+
 int main()
 {
     // Test Stuff Here. Call return 0 after test to assure modular testing.
+    teste a(5);
+    a.printX();
+    a.X() = 2;
+    int g = a.X();
+    a.printX();
 
+
+
+    return 0;
     // Abstract<float> aaa;
     Child<float> bbb;
     bbb.compute();
